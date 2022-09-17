@@ -10,7 +10,7 @@ export const Form = () => {
 
     const [owner, setOwner] = useState(config.owner);
     const [repos, setRepos] = useState(config.repos);
-    const [userName, setUserName] = useState(config.userName);
+    const [githubAuthToken, setGithubAuthToken] = useState(config.githubAuthToken);
 
     const handleChange = (e: Event) => {
         const target = e.target as HTMLInputElement;
@@ -18,7 +18,7 @@ export const Form = () => {
 
         if (name === "owner") setOwner(value);
         if (name === "repos") setRepos(value);
-        if (name === "userName") setUserName(value);
+        if (name === "githubAuthToken") setGithubAuthToken(value);
     }
 
     const handleSubmit = (event: Event) => {
@@ -39,7 +39,7 @@ export const Form = () => {
                   <Input label="Repos - Repositories name" type="text" value={repos} onChange={handleChange} name="repos" id="repos" defaultValue={config.repos} />
               </div>
               <div className="mt-4">
-                  <Input label="Github auth token" type="text" value={userName} onChange={handleChange} name="userName" id="userName" defaultValue={config.userName} />
+                  <Input label="Github auth token" type="text" value={githubAuthToken} onChange={handleChange} name="githubAuthToken" id="githubAuthToken" defaultValue={config.githubAuthToken} />
                   <a class="text-cyan-600 mt-4" href="https://docs.github.com/en/rest/quickstart">More info</a>
               </div>
               <p class="text-xs mt-2 text-gray-500">This data will be saved in the local storage</p>

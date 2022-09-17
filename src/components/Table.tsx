@@ -8,7 +8,7 @@ const Table = () => {
 	const [config] = useConfig();
 
 	useEffect(() => {
-		if (!config.userName || !config.owner || !config.repos) {
+		if (!config.githubAuthToken || !config.owner || !config.repos) {
 			redirect("/form");
 			return;
 		}

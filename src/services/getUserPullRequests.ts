@@ -1,25 +1,35 @@
 import dayjs from "dayjs";
 import { FORMAT, today } from "../constant";
+import type { Config } from "../utils/types";
 import { getIssues } from "./getIssues";
-import { octokit } from "./octokit";
+import type { Endpoints } from "@octokit/types";
+import type { Fetcher } from "./octokit";
+
+const URL_TO_FETCH = "GET /repos/{owner}/{repo}/pulls"
+
+type ListPullRequestsReposResponse = Endpoints[typeof URL_TO_FETCH]["response"]["data"];
 
 const EXCEL_DATE_FORMAT = "MMMM D";
 
-export const getUserPullRequests = async (owner: string, repos: string[], userName: string) => {
-    const allPullRequests = repos.flatMap((async (repo) => {
-        const config = {
-            owner,
-            repo
-        };
+interface Data extends Omit<Config, 'repos'> {
+    repos: string[];
+    userName: string;
+}
 
-        const response = await octokit.request("GET /repos/{owner}/{repo}/pulls", {
-            ...config,
+export const getUserPullRequests = async (fetcher: Fetcher, { repos, userName }: Data) => {
+    if (!repos || !userName) {
+        return [];
+    }
+
+    const allPullRequests = repos.flatMap((async (repo) => {
+        const response: ListPullRequestsReposResponse = await fetcher(URL_TO_FETCH, {
+            repo,
             state: "all",
             sort: "updated",
             direction: "desc",
         });
 
-        const transformedData = response.data
+        const transformedData = response
             .filter(({ user, updated_at }) => {
                 if (user) {
                     const isMyUser = (user.login.trim()) === userName;
@@ -30,7 +40,7 @@ export const getUserPullRequests = async (owner: string, repos: string[], userNa
             })
             .map(async ({ title, html_url, body, updated_at }) => {
                 const issuesNumber = body ? body.match(/#\d+/g) : [];
-                const issuesUrls = issuesNumber ? await getIssues(issuesNumber, config) : [];
+                const issuesUrls = issuesNumber ? await getIssues(fetcher, { issue_numbers: issuesNumber, repo }) : [];
                 return {
                     repo,
                     title,

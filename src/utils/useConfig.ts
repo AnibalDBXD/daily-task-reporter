@@ -4,7 +4,7 @@ import { useLocalStorage } from "./useLocalStorage"
 export const defaultFormValues: Config = {
     owner: "",
     repos: "",
-    userName: ""
+    githubAuthToken: ""
 }
 
 export const useConfig = () => useLocalStorage<Config>("config", defaultFormValues)
