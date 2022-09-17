@@ -36,13 +36,13 @@ export const Form = () => {
     }
 
   return (
-      <form onSubmit={handleSubmit} class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <form onSubmit={handleSubmit} class="bg-gray-100 shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className="flex flex-col">
               <div className="mt-4">
-                  <Input label="Owner" type="text" value={owner} onChange={handleChange} name="owner" id="owner" defaultValue={config.owner} />
+                  <Input label="Owner - Repositories owner" type="text" value={owner} onChange={handleChange} name="owner" id="owner" defaultValue={config.owner} />
               </div>
               <div className="mt-4">
-                  <Input label="Repos" type="text" value={repos} onChange={handleChange} name="repos" id="repos" defaultValue={config.repos} />
+                  <Input label="Repos - Repositories name" type="text" value={repos} onChange={handleChange} name="repos" id="repos" defaultValue={config.repos} />
               </div>
               <div className="mt-4">
                   <Input label="Github user name" type="text" value={userName} onChange={handleChange} name="userName" id="userName" defaultValue={config.userName} />
