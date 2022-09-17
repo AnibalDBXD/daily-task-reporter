@@ -16,7 +16,7 @@ export async function post({ request }: { request: Request}) {
 
   const pullRequestsData = await (await getUserPullRequests(owner, repos.split(" "), userName)).flat(1);
 
-    return new Response(JSON.stringify(pullRequestsData), {
-      status: 200
-    });
-  }
+  return new Response(JSON.stringify(pullRequestsData), {
+    status: 200
+  });
+}
