@@ -5,7 +5,7 @@ import Table from '../components/Table';
 
 <Layout title="Welcome to Astro.">
 	<main>
-		<h1>Welcome to <span class="text-gradient">Daily task reporter</span></h1>
+		<h1 class="text-center">Welcome to <span class="text-gradient">Daily task reporter</span></h1>
 		<Table client:load />
 	</main>
 </Layout>
@@ -19,7 +19,6 @@ import Table from '../components/Table';
 	}
 
 	.text-gradient {
-		text-align: center;
 		font-weight: 900;
 		background-image: var(--astro-gradient);
 		-webkit-background-clip: text;
