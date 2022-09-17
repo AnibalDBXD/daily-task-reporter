@@ -1,6 +1,4 @@
 import { redirect } from "../utils/redirect";
-import type { Config } from "../utils/types";
-import { useLocalStorage } from "../utils/useLocalStorage";
 
 const GoToForm = () => {
     const handleClick = () => {

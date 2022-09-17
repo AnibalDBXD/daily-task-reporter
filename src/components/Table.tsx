@@ -5,14 +5,14 @@ import type { Config } from "../utils/types";
 import { useLocalStorage } from "../utils/useLocalStorage";
 
 const Table = () => {
-	const [rows, setRows] = useState<any>([]);
+	const [rows, setRows] = useState<HTMLTableRowElement[]>([]);
 	const [config] = useLocalStorage<Config>("config", {});
 
 	useEffect(() => {
 		if (!config.userName || !config.owner || !config.repos) {
 			redirect("/form");
 			return;
-		};
+		}
 
 		const fetchData = async () => {
 			const reports = await (await fetch("/getReport", {
@@ -41,25 +41,25 @@ const Table = () => {
 		fetchData();
 	}, [config]);
 
-  return (
-	  <table className="table-auto w-full font-sans bg-white" style={{ fontSize: '13px' }}>
-		  <thead>
-			<tr>
-				<th>Project</th>
-				<th>Day</th>
-				<th>Short Name</th>
-				<th>Issue Link</th>
-				<th>Hours</th>
-				<th>PR LINK</th>
-				<th>Status</th>
-				<th>Payment STATUS</th>
-			</tr>
-		  </thead>
-		  <tbody>
-			{rows}
-		  </tbody>
-  </table>
-  )
+	return (
+		<table className="table-auto w-full font-sans bg-white" style={{ fontSize: '13px' }}>
+			<thead>
+				<tr>
+					<th>Project</th>
+					<th>Day</th>
+					<th>Short Name</th>
+					<th>Issue Link</th>
+					<th>Hours</th>
+					<th>PR LINK</th>
+					<th>Status</th>
+					<th>Payment STATUS</th>
+				</tr>
+			</thead>
+			<tbody>
+				{rows}
+			</tbody>
+		</table>
+	)
 }
 
 export default Table

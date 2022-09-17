@@ -3,7 +3,7 @@ import { octokit } from "./octokit";
 interface Config {
     owner: string;
     repo: string;
-};
+}
 
 export const getIssues = async (issue_numbers: string[], config: Config) => {
     const issue_urlsPromise = issue_numbers.map(async (issueNumber) => {
