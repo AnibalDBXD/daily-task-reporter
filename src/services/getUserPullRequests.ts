@@ -1,11 +1,11 @@
 import dayjs from "dayjs";
-import { FORMAT, myUser, today } from "../constant";
+import { FORMAT, today } from "../constant";
 import { getIssues } from "./getIssues";
 import { octokit } from "./octokit";
 
 const EXCEL_DATE_FORMAT = "MMMM D";
 
-export const getUserPullRequests = async (owner: string, repos: string[]) => {
+export const getUserPullRequests = async (owner: string, repos: string[], userName: string) => {
     const allPullRequests = repos.flatMap((async (repo) => {
         const config = {
             owner,
@@ -22,7 +22,7 @@ export const getUserPullRequests = async (owner: string, repos: string[]) => {
         const transformedData = response.data
             .filter(({ user, updated_at }) => {
                 if (user) {
-                    const isMyUser = (user.login.trim()) === myUser;
+                    const isMyUser = (user.login.trim()) === userName;
                     const isToday = dayjs(updated_at).format(FORMAT) === today;
                     return isMyUser && isToday;
                 }

@@ -1,12 +1,24 @@
 import { useState, useEffect } from "preact/hooks"
 import type { Report } from "../services/getReport";
+import { redirect } from "../utils/redirect";
+import type { Config } from "../utils/types";
+import { useLocalStorage } from "../utils/useLocalStorage";
 
 const Table = () => {
 	const [rows, setRows] = useState<any>([]);
+	const [config] = useLocalStorage<Config>("config", {});
 
 	useEffect(() => {
+		if (!config.userName || !config.owner || !config.repos) {
+			redirect("/form");
+			return;
+		};
+
 		const fetchData = async () => {
-			const reports = await (await fetch("/getReport")).json();
+			const reports = await (await fetch("/getReport", {
+				body: JSON.stringify(config),
+				method: "POST",
+			})).json();
 			const newRows = reports.map(({ title, issuesUrls, pullRequestUrl, repo, updated_at }: Report) => (
 				<tr>
 					<td>{repo}</td>
@@ -25,8 +37,9 @@ const Table = () => {
 			));
 			setRows(newRows);
 		};
+
 		fetchData();
-	}, []);
+	}, [config]);
 
   return (
 	  <table className="table-auto w-full font-sans bg-white" style={{ fontSize: '13px' }}>

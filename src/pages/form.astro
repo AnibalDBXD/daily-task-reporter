@@ -1,0 +1,10 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Form } from '../components/Form';
+---
+
+<Layout title="Data form">
+	<main class="grid place-items-center h-screen">
+        <Form client:load />
+	</main>
+</Layout>

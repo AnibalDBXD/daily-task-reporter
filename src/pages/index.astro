@@ -1,10 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Table from '../components/Table';
+import GoToForm from '../components/GoToForm';
 ---
 
-<Layout title="Welcome to Astro.">
+<Layout title="Welcome to Daily task reporter.">
 	<main>
+		<GoToForm client:load />
 		<h1 class="text-center">Welcome to <span class="text-gradient">Daily task reporter</span></h1>
 		<Table client:load />
 	</main>
