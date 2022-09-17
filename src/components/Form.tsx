@@ -1,18 +1,12 @@
 import { useState } from "preact/hooks";
 import { redirect } from "../utils/redirect";
 import type { Config } from "../utils/types";
-import { useLocalStorage } from "../utils/useLocalStorage";
+import { useConfig } from "../utils/useConfig";
 import { Button } from "./Button";
 import { Input } from "./Input";
 
-const defaultFormValues: Config = {
-    owner: "",
-    repos: "",
-    userName: ""
-}
-
 export const Form = () => {
-    const [config, setConfig] = useLocalStorage<Config>("config", defaultFormValues);
+    const [config, setConfig] = useConfig();
 
     const [owner, setOwner] = useState(config.owner);
     const [repos, setRepos] = useState(config.repos);
@@ -45,8 +39,10 @@ export const Form = () => {
                   <Input label="Repos - Repositories name" type="text" value={repos} onChange={handleChange} name="repos" id="repos" defaultValue={config.repos} />
               </div>
               <div className="mt-4">
-                  <Input label="Github user name" type="text" value={userName} onChange={handleChange} name="userName" id="userName" defaultValue={config.userName} />
+                  <Input label="Github auth token" type="text" value={userName} onChange={handleChange} name="userName" id="userName" defaultValue={config.userName} />
+                  <a class="text-cyan-600 mt-4" href="https://docs.github.com/en/rest/quickstart">More info</a>
               </div>
+              <p class="text-xs mt-2 text-gray-500">This data will be saved in the local storage</p>
               <Button type="submit" className="mt-6">Submit</Button>
           </div>
     </form>

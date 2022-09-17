@@ -1,12 +1,11 @@
 import { useState, useEffect } from "preact/hooks"
 import type { Report } from "../services/getReport";
 import { redirect } from "../utils/redirect";
-import type { Config } from "../utils/types";
-import { useLocalStorage } from "../utils/useLocalStorage";
+import { useConfig } from "../utils/useConfig";
 
 const Table = () => {
 	const [rows, setRows] = useState<HTMLTableRowElement[]>([]);
-	const [config] = useLocalStorage<Config>("config", {});
+	const [config] = useConfig();
 
 	useEffect(() => {
 		if (!config.userName || !config.owner || !config.repos) {
