@@ -3,9 +3,12 @@ import type { JSXInternal } from "preact/src/jsx";
 import { redirect } from "../utils/redirect";
 import type { Report } from "../utils/types";
 import { useConfig } from "../utils/useConfig";
+import Loading from "./Loading";
 
 const Table = () => {
 	const [rows, setRows] = useState<JSXInternal.Element[]>([]);
+	const [loading, setLoading] = useState(false);
+
 	const [config] = useConfig();
 
 	useEffect(() => {
@@ -13,6 +16,7 @@ const Table = () => {
 			redirect("/form");
 			return;
 		}
+		setLoading(true);
 
 		const fetchData = async () => {
 			const reports: Report[] | { error: string } = await (await fetch("/getReport", {
@@ -41,10 +45,15 @@ const Table = () => {
 				</tr>
 			));
 			setRows(newRows);
+			setLoading(false);
 		};
 
 		fetchData();
 	}, [config]);
+
+	if (loading) {
+		return <Loading />
+	}
 
 	return (
 		<table className="table-auto w-full font-sans bg-white" style={{ fontSize: '13px' }}>
