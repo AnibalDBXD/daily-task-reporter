@@ -1,10 +1,11 @@
 import { useState, useEffect } from "preact/hooks"
-import type { Report } from "../services/getReport";
+import type { JSXInternal } from "preact/src/jsx";
 import { redirect } from "../utils/redirect";
+import type { Report } from "../utils/types";
 import { useConfig } from "../utils/useConfig";
 
 const Table = () => {
-	const [rows, setRows] = useState<HTMLTableRowElement[]>([]);
+	const [rows, setRows] = useState<JSXInternal.Element[]>([]);
 	const [config] = useConfig();
 
 	useEffect(() => {
@@ -14,10 +15,15 @@ const Table = () => {
 		}
 
 		const fetchData = async () => {
-			const reports = await (await fetch("/getReport", {
+			const reports: Report[] | { error: string } = await (await fetch("/getReport", {
 				body: JSON.stringify(config),
 				method: "POST",
 			})).json();
+			if ("error" in reports) {
+				alert(reports.error);
+				redirect("/form");
+				return;
+			}
 			const newRows = reports.map(({ title, issuesUrls, pullRequestUrl, repo, updated_at }: Report) => (
 				<tr>
 					<td>{repo}</td>
