@@ -7,11 +7,11 @@ type ListIssuesReposResponse = Endpoints[typeof URL_TO_FETCH]["response"]["data"
 
 interface Config {
     repo: string;
-    issue_numbers: string[]
+    issuesNumber: string[]
 }
 
-export const getIssues = async (fetcher: Fetcher, { issue_numbers, repo }: Config) => {
-    const issue_urlsPromise = issue_numbers.map(async (issueNumber) => {
+export const getIssues = async (fetcher: Fetcher, { issuesNumber, repo }: Config) => {
+    const issue_urlsPromise = issuesNumber.map(async (issueNumber) => {
         const response: ListIssuesReposResponse = await fetcher(URL_TO_FETCH, {
             repo,
             issue_number: Number(issueNumber.replace('#', ''))

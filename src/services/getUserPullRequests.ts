@@ -1,7 +1,6 @@
 import dayjs from "dayjs";
 import { FORMAT, today } from "../constant";
 import type { Config } from "../utils/types";
-import { getIssues } from "./getIssues";
 import type { Endpoints } from "@octokit/types";
 import type { Fetcher } from "./octokit";
 
@@ -38,19 +37,18 @@ export const getUserPullRequests = async (fetcher: Fetcher, { repos, userName }:
                 }
                 return false;
             })
-            .map(async ({ title, html_url, body, updated_at }) => {
+            .map(({ title, html_url, body, updated_at }) => {
                 const issuesNumber = body ? body.match(/#\d+/g) : [];
-                const issuesUrls = issuesNumber ? await getIssues(fetcher, { issue_numbers: issuesNumber, repo }) : [];
                 return {
                     repo,
                     title,
                     pullRequestUrl: html_url,
-                    issuesUrls,
+                    issuesNumber: issuesNumber as string[],
                     updated_at: dayjs(updated_at).format(EXCEL_DATE_FORMAT)
                 }
             })
 
-        return await Promise.all(transformedData);
+        return transformedData;
     }))
 
     return await Promise.all(allPullRequests);
