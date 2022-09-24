@@ -1,10 +1,15 @@
 import { getIssues } from './../services/getIssues';
 import { getUserPullRequests } from "../services/getUserPullRequests";
 import { createOctokitFetcher, Fetcher } from "../services/octokit";
-import type { Config } from "../utils/types";
+import type { Config, VIEW } from "../utils/types";
+
+interface FormRequest extends Config {
+  view: VIEW;
+  date: string;
+}
 
 export async function post({ request }: { request: Request}) {
-  const { owner, repos, githubAuthToken }: Config = await request.json();
+  const { owner, repos, githubAuthToken, view, date }: FormRequest = await request.json();
   if (!owner || !repos || !githubAuthToken) {
     return (
       new Response(JSON.stringify({
@@ -42,7 +47,9 @@ export async function post({ request }: { request: Request}) {
 
   const data = {
     repos: repos.split(" "),
-    userName: name
+    userName: name,
+    view,
+    date
   };
 
   const pullRequests = (await getUserPullRequests(fetcher, data)).flat(1);
@@ -60,7 +67,13 @@ export async function post({ request }: { request: Request}) {
 
   const pullRequestsWithIssueLinks = await Promise.all(pullRequestsWithIssueLinksPromise);
 
-  return new Response(JSON.stringify(pullRequestsWithIssueLinks), {
+  const sortedPullRequests = pullRequestsWithIssueLinks.sort((a, b) => {
+    const aDate = new Date(a.updated_at);
+    const bDate = new Date(b.updated_at);
+    return aDate.getTime() - bDate.getTime();
+  });
+
+  return new Response(JSON.stringify(sortedPullRequests), {
     status: 200
   });
 }

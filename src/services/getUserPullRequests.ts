@@ -1,6 +1,5 @@
 import dayjs from "dayjs";
-import { FORMAT, today } from "../constant";
-import type { Config } from "../utils/types";
+import type { Config, VIEW } from "../utils/types";
 import type { Endpoints } from "@octokit/types";
 import type { Fetcher } from "./octokit";
 
@@ -13,9 +12,11 @@ const EXCEL_DATE_FORMAT = "MMMM D";
 interface Data extends Omit<Config, 'repos'> {
     repos: string[];
     userName: string;
+    view: VIEW;
+    date: string;
 }
 
-export const getUserPullRequests = async (fetcher: Fetcher, { repos, userName }: Data) => {
+export const getUserPullRequests = async (fetcher: Fetcher, { repos, userName, view, date }: Data) => {
     if (!repos || !userName) {
         return [];
     }
@@ -24,15 +25,13 @@ export const getUserPullRequests = async (fetcher: Fetcher, { repos, userName }:
         const response: ListPullRequestsReposResponse = await fetcher(URL_TO_FETCH, {
             repo,
             state: "all",
-            sort: "updated",
-            direction: "desc",
         });
 
         const transformedData = response
             .filter(({ user, updated_at }) => {
                 if (user) {
                     const isMyUser = (user.login.trim()) === userName;
-                    const isToday = dayjs(updated_at).format(FORMAT) === today;
+                    const isToday = dayjs(updated_at).isSame(date, view);
                     return isMyUser && isToday;
                 }
                 return false;

@@ -11,3 +11,8 @@ export interface Report {
     issuesUrls: string[];
     updated_at: string;
 }
+
+export enum VIEW {
+    DAY = "day",
+    MONTH = "month"
+}
